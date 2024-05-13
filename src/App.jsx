@@ -1,67 +1,89 @@
-import styled from "styled-components";
+import { styled, ThemeProvider, createGlobalStyle } from "styled-components";
 import Table from "./components/Table";
+import Sidebar from "./components/Sidebar";
+
+const theme = {
+  colors: {
+    // CSS DARK THEME PRIMARY COLORS
+    primary100: "#0ae2ff",
+    primary200: "#51e6ff",
+    primary300: "#73e9ff",
+    primary400: "#8decff",
+    primary500: "#a3f0ff",
+    primary600: "#b7f3ff",
+    // CSS DARK THEME SURFACE COLORS
+    surface100: "#0d0a0a",
+    surface200: "#242323",
+    surface300: "#3b3a3a",
+    surface400: "#545353",
+    surface500: "#6e6d6d",
+  },
+};
+
+const GlobalStyle = createGlobalStyle`
+  :root{
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: #b7f3ff;
+    background-color: ${({ theme }) => theme.colors.surface100};
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100vh;  
+}
+`;
 
 const AppContainer = styled.div`
-  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main";
+`;
+
+const SidebarContainer = styled.div`
+  grid-area: sidebar;
+  padding-right: 5px;
+`;
+
+const PageHeader = styled.div`
+  grid-area: header;
 `;
 
 const PageContent = styled.div`
-  margin-left: 200px;
-  padding: 1px 16px;
-  height: 1000px;
-`;
-
-const SideBar = styled.div`
-  margin: 0;
-  padding: 0;
-  width: 200px;
-  background-color: #3b3a3a99;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-  border-radius: 0px 15px 15px 0px;
-`;
-
-const SideBarTitle = styled.h1`
-  color: white;
-  border-bottom: 1px solid white;
-  padding: 5px 5px 5px 5px;
-  font-size: 1.5rem;
-  width: 90%;
-  text-align: center;
-`;
-
-const SideBarLink = styled.a`
-  display: block;
-  color: white;
-  padding: 16px;
-  text-decoration: none;
+  grid-area: main;
+  padding: 5px;
 `;
 
 function App() {
   return (
-    <AppContainer>
-      <SideBar>
-        <SideBarTitle>Home Inventory</SideBarTitle>
-        <SideBarLink href="#home">Home</SideBarLink>
-        <SideBarLink href="#news">News</SideBarLink>
-        <SideBarLink href="#contact">Contact</SideBarLink>
-        <SideBarLink href="#about">About</SideBarLink>
-      </SideBar>
-      <PageContent>
-        <div>
-          <h2>Inventory</h2>
-          <input></input>
-          <div>
-            Categories:
-            <button>Home</button>
-            <button>Bathroom</button>
-            <button>Kitchen</button>
-          </div>
-        </div>
-        <Table></Table>
-      </PageContent>
-    </AppContainer>
+    <>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <AppContainer>
+          <SidebarContainer>
+            <Sidebar />
+          </SidebarContainer>
+          <PageHeader>
+            <div>Category</div>
+            <p>Pagination</p>
+          </PageHeader>
+          <PageContent>
+            <Table></Table>
+          </PageContent>
+        </AppContainer>
+      </ThemeProvider>
+    </>
   );
 }
 
